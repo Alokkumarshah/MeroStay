@@ -11,7 +11,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'MeroStay_DEV',
-    allowerdFormats: ["png","jpg","jpeg","HEIF"], // supports promises as well
+    allowedFormats: ["png","jpg","jpeg","heif"], // supports promises as well
    
   },
 });
