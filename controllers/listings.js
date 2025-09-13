@@ -30,25 +30,41 @@ module.exports.renderNewForm=(req,res)=>{
    res.render("listings/show.ejs",{listing});
     }
 };
-module.exports.createListing=async (req,res,next)=>{
+module.exports.createListing = async (req, res, next) => {
+    try {
+        // Check if file exists
+        if (!req.file) {
+            req.flash("error", "Image upload failed. Please try again.");
+            return res.redirect("/listings/new");
+        }
 
- let response=await geocodingClient.forwardGeocode({
-  query: req.body.listing.location,
-  limit: 1,
-})
-  .send();
+        // Geocoding
+        let response = await geocodingClient.forwardGeocode({
+            query: req.body.listing.location,
+            limit: 1,
+        }).send();
 
- let url= req.file.path;
- let filename=req.file.filename;
+        // Get uploaded image info
+        let url = req.file.path;
+        let filename = req.file.filename;
 
-  const newListing=new Listing(req.body.listing);
-  newListing.owner=req.user._id;
-  newListing.image={url,filename};
-  newListing.geometry=response.body.features[0].geometry;
-  await newListing.save();
-  req.flash("success","New Listing Created!");
-  res.redirect("/listings");
+        // Create new listing
+        const newListing = new Listing(req.body.listing);
+        newListing.owner = req.user._id;
+        newListing.image = { url, filename };
+        newListing.geometry = response.body.features[0].geometry;
+
+        await newListing.save();
+        req.flash("success", "New Listing Created!");
+        res.redirect("/listings");
+
+    } catch (err) {
+        console.error("Create Listing Error:", err);
+        req.flash("error", "Something went wrong while creating the listing.");
+        res.redirect("/listings/new");
+    }
 };
+
 
 module.exports.renderEditForm=async (req,res)=>{
     let {id}=req.params;

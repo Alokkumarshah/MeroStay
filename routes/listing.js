@@ -17,9 +17,24 @@ function wrapAsync(fn){
 
 
 router.route("/")
-.get(wrapAsync(listingController.index))
-.post(isLoggedIn,validateListing,upload.single('listing[image]'),wrapAsync(listingController.createListing)
-);
+  .get(wrapAsync(listingController.index))
+  .post(
+    isLoggedIn,
+    validateListing,
+    // Wrap multer to catch upload errors
+    (req, res, next) => {
+      upload.single('listing[image]')(req, res, function(err) {
+        if (err) {
+          console.error("Cloudinary Upload Error:", err);
+          req.flash("error", "Image upload failed. " + err.message);
+          return res.redirect("/listings/new");
+        }
+        next(); // continue to controller
+      });
+    },
+    wrapAsync(listingController.createListing)
+  );
+
 
 
 
