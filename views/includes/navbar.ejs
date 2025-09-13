@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm border-bottom sticky-top">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center fw-bold text-dark" href="/listings">
+      <i class="fa-solid fa-m me-2" style="color: #e63946;"></i> <!-- Red "M" -->eroStay
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <!-- Left side -->
+      <div class="navbar-nav">
+        <a class="nav-link px-3" href="/listings">
+          <i class="fa-solid fa-compass me-1"></i> Explore
+        </a>
+      </div>
+
+      <!-- Right side -->
+      <div class="navbar-nav ms-auto align-items-center">
+        <a class="btn btn-outline-dark rounded-pill px-3 me-2" href="/listings/new">
+          <i class="fa-solid fa-plus me-1"></i> New Listing
+        </a>
+
+        <% if(!currUser){ %>
+          <a class="btn btn-light border rounded-pill px-3 me-2" href="/signup">
+            <i class="fa-solid fa-user-plus me-1"></i> Sign Up
+          </a>
+          <a class="btn btn-dark rounded-pill px-3" href="/login">
+            <i class="fa-solid fa-right-to-bracket me-1"></i> Log In
+          </a>
+        <% } %>
+
+        <% if(currUser){ %>
+          <span class="me-3 text-muted">Hi, <%= currUser.username %>!</span>
+          <a class="btn btn-danger rounded-pill px-3" href="/logout">
+            <i class="fa-solid fa-right-from-bracket me-1"></i> Log Out
+          </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>
